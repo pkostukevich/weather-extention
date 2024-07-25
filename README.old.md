@@ -1,2 +1,0 @@
-# weather-extention
-Chrome extension

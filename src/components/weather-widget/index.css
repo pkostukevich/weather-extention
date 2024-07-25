@@ -1,0 +1,24 @@
+.weather-wrapper{
+    position: absolute;
+    top: 20px;
+    left: calc(50% - 35px);
+}
+
+.weather-widget{
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-size: contain;
+    background: linear-gradient(to bottom left, #e41617, #e26118);
+}
+
+.weather-description{
+    background-color: #f5e0d8;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}

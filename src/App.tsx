@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
+
+const App = () => {
+ const cities = ['Минск', 'Токио', 'Нью-Йорк'];
+
+  const [selectedCity, setSelectedCity] = useState(cities[0]);
+
+  useEffect(() => {fetchWeather()}, [selectedCity]);
+
+  useEffect(() => {
+    chrome.storage.local.get('selectedCity', (result) => {
+      if (result.selectedCity !== undefined) {
+        setSelectedCity(result.selectedCity);
+      }
+    });
+  }, []);
+  
+  const handleCityChange = (city: string) => {
+    setSelectedCity(city);
+    chrome.storage.local.set({ 'selectedCity': city });
+  };
+  
+  const fetchWeather = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.tabs.sendMessage(tabs[0].id!, { city: selectedCity }, response => {
+        if (response) {
+          chrome.storage.local.set({ 'weatherData': response.weatherData});
+        }
+      });
+    });
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Узнать погоду в городе</h2>
+      {cities.map((city, index) => (
+        <button key={index} onClick={() => handleCityChange(cities[index])}
+            className={cities[index] === selectedCity ? "button-city active" : "button-city"}>{city}</button>
+    ))}
     </div>
   );
-}
+};
 
 export default App;
