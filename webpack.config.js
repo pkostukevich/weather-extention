@@ -27,11 +27,22 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
+      },
     ],
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "manifest.json", to: "../manifest.json" }],
+      patterns: [
+        { from: "manifest.json", to: "../manifest.json" },
+        { from: "icons", to: "../icons" },
+      ],
     }),
     ...getHtmlPlugins(["index"]),
   ],
