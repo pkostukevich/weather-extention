@@ -1,15 +1,17 @@
 import ReactDOM from "react-dom/client";
 import { WeatherWidget } from "./components/WeatherWidget/WeatherWidget";
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.city) {
-    try {
-      const weatherData = await fetchWeatherData(message.city);
-      updateWeatherWidget(weatherData);
-      sendResponse({ weatherData });
-    } catch (error) {
-      sendResponse({ error });
-    }
+    fetchWeatherData(message.city)
+      .then((weatherData) => {
+        updateWeatherWidget(weatherData);
+        sendResponse({ weatherData });
+      })
+      .catch((error) => {
+        sendResponse({ error: error.message });
+      });
+
     return true;
   }
 });
